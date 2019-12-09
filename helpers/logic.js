@@ -1,5 +1,6 @@
 //logic related helpers
 
+
 //returns angle between two points (0 - 360)
 //follow standard geometric angle conventions
 export function getAngle(a, b)
@@ -29,4 +30,30 @@ export function getStep(a, b, threshhold)
 {
     var angle = getAngle(a,b);
     var distance = getDistance(a,b);
+}
+
+//create phase object
+//"which part of the character are we currently at"
+export function Phase(stroke, step, endOfStroke = false, endOfCharacter = false)
+{
+    this.stroke = stroke;
+    this.step = step;
+    this.endOfStroke = endOfStroke;
+    this.endOfCharacter = endOfCharacter;
+}
+
+export function getNextPhase(currentPhase, character)
+{
+
+    return new Phase(1, 1);
+}
+
+export function isValidCharacter(a)
+{
+
+}
+
+export function isValidPhase(b)
+{
+    
 }
