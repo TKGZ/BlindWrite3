@@ -1,4 +1,11 @@
+import {Dimensions} from 'react-native';
+
 //logic related helpers
+const STEP_THRESHHOLD = 100;
+const AREA_WIDTH = 3;
+const AREA_HEIGHT = 3;
+const WIDTH_SCREEN = Math.round(Dimensions.get('screen').width);
+const HEIGHT_SCREEN = Math.round(Dimensions.get('screen').height);
 
 
 //returns angle between two points (0 - 360)
@@ -10,7 +17,6 @@ export function getAngle(a, b)
 
     return (Math.atan2(y, x) * 180 / Math.PI);
 }
-
 
 //returns distance between two points
 export function getDistance(a, b)
@@ -34,6 +40,28 @@ export function getStep(a, b, threshhold)
 
 //create phase object
 //"which part of the character are we currently at"
+
+
+export function getNextPhase(currentPhase, letter)
+{
+    
+    return new Phase(1, 1);
+}
+
+//returns the area depending on the point relative to element
+//height should me element/window height (of element!), widht probably entire screen
+//1 2 3
+//4 5 6
+//7 8 9
+export function getStartArea(point, height = HEIGHT_SCREEN, width = WIDTH_SCREEN)
+{
+
+    return (1);
+}
+
+//CONSTRUCTOR FUNCTIONS
+
+//which part of the letter are we at?
 export function Phase(stroke, step, endOfStroke = false, endOfCharacter = false)
 {
     this.stroke = stroke;
@@ -42,18 +70,10 @@ export function Phase(stroke, step, endOfStroke = false, endOfCharacter = false)
     this.endOfCharacter = endOfCharacter;
 }
 
-export function getNextPhase(currentPhase, character)
+export 
+
+export function Letter(name, shape = [[]])
 {
-
-    return new Phase(1, 1);
-}
-
-export function isValidCharacter(a)
-{
-
-}
-
-export function isValidPhase(b)
-{
-    
+    this.name = name;
+    this.shape = shape;
 }
