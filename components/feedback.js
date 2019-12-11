@@ -20,6 +20,25 @@ export function onStep(step = 0)
 
 }
 
+//preloads all the sounds
+
+export async function previewStroke(stroke)
+{
+    console.log("previewing stroke");
+    let count = stroke.length;
+    let i = 0;
+    let interval = setInterval(() => {
+        directionSound(stroke[i]);
+        i++;
+        count--;
+        if (count == 0)
+        {
+            clearInterval(interval);
+            return;
+        }
+    }, 800);
+}
+
 export async function directionSound(a)
 {
     console.log("area sound for " + a)
@@ -68,7 +87,7 @@ export async function directionSound(a)
                 break;
             default: await soundObject.loadAsync(require('../assets/audio/feedback/correct.mp3'));
         }
-        await soundObject.playAsync().then(console.log("correct sound"));
+        await soundObject.playAsync();
 
         // console.log("correct sound")
 

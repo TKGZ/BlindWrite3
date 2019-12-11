@@ -60,7 +60,7 @@ export default function TouchArea(props)
     if (step != 0)
     {
       console.log("new step is " + step);
-      feedback.onStep(step);
+      // feedback.onStep(step);
       updateCurrentStroke(step, currentPoint);
     }
   }, [startPoint, currentPoint]);
@@ -74,6 +74,8 @@ export default function TouchArea(props)
 
     var stroke = [...currentStroke];
     stroke.push(newStep);
+
+    if (stroke.length > 1) feedback.onStep(newStep);
     setCurrentStroke(stroke);
   }
 
@@ -84,7 +86,7 @@ export default function TouchArea(props)
 
   function resetStroke()
   {
-
+    setCurrentStroke([]);
   }
 
   function newLetter()
@@ -100,6 +102,8 @@ export default function TouchArea(props)
 
     feedback.onStart(startArea);
     updateCurrentStroke(startArea, point);
+
+    feedback.previewStroke([3,3,3,3,8,8,8]);
   }
 
   function onMove(e, g)
@@ -121,6 +125,7 @@ export default function TouchArea(props)
     //ELIF notCorrect
       //resetStroke()
     //reset current stroke
+    resetStroke();
     setFailed(false);
   }
     
