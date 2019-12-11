@@ -2,8 +2,10 @@ import {Dimensions} from 'react-native';
 
 //logic related helpers
 const STEP_THRESHHOLD = 100;
-const AREA_WIDTH = 3;
-const AREA_HEIGHT = 3;
+
+// const X_AREAS = 3;
+// const Y_AREAS = 3;
+
 const WIDTH_SCREEN = Math.round(Dimensions.get('screen').width);
 const HEIGHT_SCREEN = Math.round(Dimensions.get('screen').height);
 
@@ -53,10 +55,16 @@ export function getNextPhase(currentPhase, letter)
 //1 2 3
 //4 5 6
 //7 8 9
-export function getStartArea(point, height = HEIGHT_SCREEN, width = WIDTH_SCREEN)
+//assumes 3 x 3
+export function getStartArea(point, height = 0.8*HEIGHT_SCREEN, width = WIDTH_SCREEN)
 {
+    var x_length = width / 3;
+    var y_length = height / 3;
 
-    return (1);
+    x = Math.floor(point.x / x_length);
+    y = Math.floor(point.y / y_length);
+
+    return (3 * y + x + 1);
 }
 
 //CONSTRUCTOR FUNCTIONS
@@ -69,8 +77,6 @@ export function Phase(stroke, step, endOfStroke = false, endOfCharacter = false)
     this.endOfStroke = endOfStroke;
     this.endOfCharacter = endOfCharacter;
 }
-
-export 
 
 export function Letter(name, shape = [[]])
 {

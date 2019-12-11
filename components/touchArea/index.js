@@ -1,7 +1,8 @@
-import React from './node_modules/react';
-import { StyleSheet, Text, View, useState, useEffect, PanResponder } from 'react-native';
-import * as logic from '../helpers/logic';
-import * as feedback from '../helpers/feedback';
+import * as logic from '../logic';
+import * as feedback from '../feedback';
+
+import React, {useState, useEffect} from 'react';
+import { StyleSheet, Text, View, PanResponder,  Dimensions } from 'react-native';
 
 //touch area and its relevant logic here
 //how much distance to travel before detecting a new step!
@@ -22,15 +23,15 @@ export default function TouchArea(props)
   //stroke detected by the input system
   //literally just arrays of numbers
   const [currentStroke, setCurrentStroke] = useState([]);
-  const [previousStroke, setPreviousStroke] = useState([]]);
+  const [previousStroke, setPreviousStroke] = useState([]);
 
   //are we in failiure mode during a touch?
   const [failed, setFailed] = useState(false);
 
   //verification system
   useEffect(() => {
+    console.log('verify on stroke update to ' + currentStroke[currentStroke.length - 1]);
     //IF FAILED
-      //failed feedback on every stroke (tell user to start again!)
       //do nothing
     //ELSE check if last step correct
       //ELSE IF correct
@@ -46,22 +47,32 @@ export default function TouchArea(props)
     //
   }
 
+  //stroke updating system
   useEffect(() => {
     //IF getStep not 0
       //updateCurrentStroke();
+    
   }, [currentPoint]);
 
   //using the coordinates from current point
   //updates current stroke from start to end positions IF changes sufficiently
   function updateCurrentStroke(newStep)
   {
+    //update startPoint
+    setStartPoint(currentPoint);
+
     //update current stroke
+    var stroke = [...currentStroke];
+    stroke.push(newStep);
+    setCurrentStroke(stroke);
+    console.log("updated stroke " + stroke);
+
     //update current phase
   }
 
   function nextStroke()
   {
-    //
+    
   }
 
   function resetStroke()
@@ -76,13 +87,26 @@ export default function TouchArea(props)
 
   function onStart(e, g)
   {
+    // console.log(currentPoint.x + " " + currentPoint.y)
     //get starting area and add it to currentStroke
-    //update starting point and current stroke
+    //update starting point 
+    let point = new Point(e.nativeEvent.locationX, e.nativeEvent.locationY)
+    setCurrentPoint(point);
+    // console.log('start at ' + point.x + " " + point.y);
+
+    let startArea = logic.getStartArea(point)
+
+    console.log('area ' + startArea);
+
+    // setCurrentStroke([startArea]);
+    updateCurrentStroke(startArea);
   }
 
   function onMove(e, g)
   {
     //update currentPoint
+    let point = new Point(e.nativeEvent.locationX, e.nativeEvent.locationY)
+    setCurrentPoint(point);
   }
 
   function onEnd(e, g)
@@ -119,18 +143,18 @@ export default function TouchArea(props)
       // The accumulated gesture distance since becoming responder is
       // gestureState.d{x,y}
 
-      onMove(event, gestureState);
+      onMove(evt, gestureState);
     },
     onPanResponderTerminationRequest: (evt, gestureState) => true,
     onPanResponderRelease: (evt, gestureState) => {
       // The user has released all touches while this view is the
       // responder. This typically means a gesture has succeeded
-      onEnd(event, gestureState);
+      onEnd(evt, gestureState);
     },
     onPanResponderTerminate: (evt, gestureState) => {
       // Another component has become the responder, so this gesture
       // should be cancelled
-      onEnd(event, gestureState);
+      onEnd(evt, gestureState);
 
     },
     onShouldBlockNativeResponder: (evt, gestureState) => {
@@ -140,9 +164,24 @@ export default function TouchArea(props)
       return true;
     },
   })
+
+  const mainStyle = {
+    backgroundColor: '#f39c12',
+    // height: "70%",
+    flex: 8,
+  }
   
   return (
-      <View {..._panResponder.panHandlers}>
+      <View
+        style = {mainStyle}
+        {..._panResponder.panHandlers}>
+        <Text>TouchArea</Text>
       </View>
   );
+}
+
+function Point(x, y)
+{
+  this.x = x;
+  this.y = y;
 }
