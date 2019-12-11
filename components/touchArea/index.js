@@ -28,6 +28,10 @@ export default function TouchArea(props)
   //are we in failiure mode during a touch?
   const [failed, setFailed] = useState(false);
 
+  useEffect(() => {
+    // feedback.prepareSound();
+  }, []);
+
   //verification system
   useEffect(() => {
     // console.log('verify on stroke update to ' + currentStroke[currentStroke.length - 1]);
@@ -94,7 +98,7 @@ export default function TouchArea(props)
     let startArea = logic.getStartArea(point);
     console.log("start " + point.x + ' area ' + startArea);
 
-    feedback.onStart();
+    feedback.onStart(startArea);
     updateCurrentStroke(startArea, point);
   }
 
