@@ -30,7 +30,7 @@ export default function TouchArea(props)
 
   //verification system
   useEffect(() => {
-    console.log('verify on stroke update to ' + currentStroke[currentStroke.length - 1]);
+    // console.log('verify on stroke update to ' + currentStroke[currentStroke.length - 1]);
     //IF FAILED
       //do nothing
     //ELSE check if last step correct
@@ -51,23 +51,26 @@ export default function TouchArea(props)
   useEffect(() => {
     //IF getStep not 0
       //updateCurrentStroke();
-    
-  }, [currentPoint]);
+    // console.log("step for " + startPoint.x + " " + currentPoint.x);
+    let step = logic.getStep(startPoint, currentPoint);
+    if (step != 0)
+    {
+      console.log("new step is " + step);
+      feedback.onStep(step);
+      updateCurrentStroke(step, currentPoint);
+    }
+  }, [startPoint, currentPoint]);
 
   //using the coordinates from current point
   //updates current stroke from start to end positions IF changes sufficiently
-  function updateCurrentStroke(newStep)
+  function updateCurrentStroke(newStep, newStartPoint)
   {
-    //update startPoint
-    setStartPoint(currentPoint);
+    setStartPoint(newStartPoint);
+    setCurrentPoint(newStartPoint);
 
-    //update current stroke
     var stroke = [...currentStroke];
     stroke.push(newStep);
     setCurrentStroke(stroke);
-    console.log("updated stroke " + stroke);
-
-    //update current phase
   }
 
   function nextStroke()
@@ -87,24 +90,16 @@ export default function TouchArea(props)
 
   function onStart(e, g)
   {
-    // console.log(currentPoint.x + " " + currentPoint.y)
-    //get starting area and add it to currentStroke
-    //update starting point 
-    let point = new Point(e.nativeEvent.locationX, e.nativeEvent.locationY)
-    setCurrentPoint(point);
-    // console.log('start at ' + point.x + " " + point.y);
+    let point = new Point(e.nativeEvent.locationX, e.nativeEvent.locationY);
+    let startArea = logic.getStartArea(point);
+    console.log("start " + point.x + ' area ' + startArea);
 
-    let startArea = logic.getStartArea(point)
-
-    console.log('area ' + startArea);
-
-    // setCurrentStroke([startArea]);
-    updateCurrentStroke(startArea);
+    feedback.onStart();
+    updateCurrentStroke(startArea, point);
   }
 
   function onMove(e, g)
   {
-    //update currentPoint
     let point = new Point(e.nativeEvent.locationX, e.nativeEvent.locationY)
     setCurrentPoint(point);
   }
